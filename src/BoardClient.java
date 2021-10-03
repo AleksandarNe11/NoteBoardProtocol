@@ -87,9 +87,10 @@ public class BoardClient {
 
     public static String POST() {
         String method = "POST ";
-        String parameters = "<x coordinate> <y coordinate> <width> <height> <colour> <message> ";
+        String parameters = "<x-coordinate> <y-coordinate> <width> <height> <colour> <message> ";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
+//        String header = method.concat(parameters).concat(CRLF);
 //        String body = "<x-coordinate> <y-coordinate> <width> <height> <colour> <message>";
 
         return header;
@@ -99,7 +100,7 @@ public class BoardClient {
         String method = "GET ";
         String parameters = "";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
 
         return header;
     }
@@ -108,24 +109,24 @@ public class BoardClient {
         String method = "GET ";
         String parameters = "<colour> <contains> <refersTo>";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
 
         return header;
     }
     public static String PIN() {
         String method = "PIN ";
-        String parameters = "<x coordinate> <y coordinate>";
+        String parameters = "<x-coordinate> <y-coordinate>";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
 
         return header;
     }
 
     public static String UNPIN() {
         String method = "UNPIN ";
-        String parameters = "<x coordinate> <y coordinate>";
+        String parameters = "<x-coordinate> <y-coordinate>";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
 
         return header;
     }
@@ -134,7 +135,7 @@ public class BoardClient {
         String method = "CLEAR ";
         String parameters = "";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
 
         return header;
     }
@@ -143,7 +144,7 @@ public class BoardClient {
         String method = "SHAKE ";
         String parameters = "";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
 
         return header;
     }
@@ -152,7 +153,7 @@ public class BoardClient {
         String method = "CONNECT ";
         String parameters = "";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
 
         return header;
     }
@@ -161,7 +162,7 @@ public class BoardClient {
         String method = "DISCONNECT ";
         String parameters = "";
 
-        String header = method.concat(parameters).concat(CRLF);
+        String header = method.concat(parameters);
 
         return header;
     }
