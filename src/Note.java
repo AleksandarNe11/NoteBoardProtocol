@@ -80,4 +80,8 @@ public class Note {
     public Boolean referenceMatches(String inputReference) {
         return inputReference == this.getMessage();
     }
+
+    public String getCoordsAsString() {
+        return "(" + this.getxCoord() + "," + this.getyCoord() + ")";
+    }
 }

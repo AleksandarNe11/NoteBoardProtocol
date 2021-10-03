@@ -5,9 +5,11 @@ import java.util.* ;
 public class BoardRequest implements Runnable {
     Socket socket;
     final static String CRLF = "\r\n";
+    final Board board;
 
-    public BoardRequest(Socket socket) {
+    public BoardRequest(Socket socket, Board board) {
         this.socket = socket;
+        this.board = board;
     }
 
     @Override
@@ -89,11 +91,21 @@ public class BoardRequest implements Runnable {
 
     private void POST(StringTokenizer tokens) throws InvalidRequestParametersException {
         int numTokens = tokens.countTokens();
-        if (numTokens == 6) {
+        if (numTokens >= 6) {
+            int xcoord, ycoord, width, height;
+            String colour, message;
+            xcoord = Integer.parseInt(tokens.nextToken());
+            ycoord = Integer.parseInt(tokens.nextToken());
+            width = Integer.parseInt(tokens.nextToken());
+            height = Integer.parseInt(tokens.nextToken());
+            colour = tokens.nextToken();
+            message = tokens.nextToken();
             while (tokens.hasMoreTokens()) {
-                System.out.println(tokens.nextToken());
+                message = message.concat(tokens.nextToken());
             }
-            System.out.println("======================================");
+
+
+
         } else {
             throw new InvalidRequestParametersException();
         }
