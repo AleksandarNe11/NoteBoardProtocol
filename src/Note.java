@@ -1,10 +1,10 @@
 public class Note {
-    private int xcoord;
-    private int ycoord;
-    private int width;
-    private int height;
-    private String colour;
-    private String message;
+    private final int xcoord;
+    private final int ycoord;
+    private final int width;
+    private final int height;
+    private final String colour;
+    private final String message;
     private Boolean status;
 
     public Note(int xcoord, int ycoord, int width, int height,
@@ -23,13 +23,13 @@ public class Note {
         return this.xcoord;
     }
     public int getyCoord() {
-        return this.xcoord;
+        return this.ycoord;
     }
     public int getWidth() {
-        return this.xcoord;
+        return this.width;
     }
     public int getHeight() {
-        return this.xcoord;
+        return this.height;
     }
     public String getColour() {
         return this.colour;
@@ -50,5 +50,34 @@ public class Note {
     }
 
     //Functional Methods
+    /**
+     * @param x - x coordinate of input
+     * @param y - y coordinate of input
+     * @return - returns tre if the x coordinate and y coordinate are within the
+     * area of the note
+     */
+    public Boolean withinNote(int x, int y) {
+        if (x >= getxCoord() && x <= getxCoord() + getWidth()) {
+            return y >= getyCoord() && y <= getyCoord() + getHeight();
+        }
+        return false;
+    }
 
+    /**
+     *
+     * @param inputColour - The colour this card is being checked for
+     * @return - returns true if inputColour matches colour, returns false otherwise
+     */
+    public Boolean colourMatches(String inputColour) {
+        return inputColour == getColour();
+    }
+
+    /**
+     *
+     * @param inputReference - The reference this card is being checked for
+     * @return - returns true if the input reference matches card refersTo, return false otherwise
+     */
+    public Boolean referenceMatches(String inputReference) {
+        return inputReference == this.getMessage();
+    }
 }
