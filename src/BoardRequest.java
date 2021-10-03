@@ -22,6 +22,7 @@ public class BoardRequest implements Runnable {
     private void processRequest() throws IOException {
         // Instantiate the input and output streams
         InputStream is = socket.getInputStream();
+        // ** Change this to a String parsing stream **
         ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
         PrintWriter textOut = new PrintWriter(socket.getOutputStream(), true);
 
@@ -34,13 +35,17 @@ public class BoardRequest implements Runnable {
         // Constantly Loop listening for input from the client
         String headerLine;
         while ((headerLine = br.readLine()) != null) {
-            // Parse method type and pass string token and method type to invokeMethod for further behaviour
-            StringTokenizer tokens = new StringTokenizer(headerLine);
-            String method = tokens.nextToken();
-            System.out.println(method);
-            invokeMethod(method, tokens);
-            // Send some sort of response to client
-            textOut.println("Please enter next method call");
+            try {
+                // Parse method type and pass string token and method type to invokeMethod for further behaviour
+                StringTokenizer tokens = new StringTokenizer(headerLine);
+                String method = tokens.nextToken();
+                System.out.println(method);
+                invokeMethod(method, tokens);
+                // Send some sort of response to client
+                textOut.println("Please enter next method call");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
 
         // Close socket connection to client
@@ -84,7 +89,7 @@ public class BoardRequest implements Runnable {
 
     private void POST(StringTokenizer tokens) throws InvalidRequestParametersException {
         int numTokens = tokens.countTokens();
-        if (numTokens == 5) {
+        if (numTokens == 6) {
             while (tokens.hasMoreTokens()) {
                 System.out.println(tokens.nextToken());
             }

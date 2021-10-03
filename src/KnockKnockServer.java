@@ -6,6 +6,7 @@ public class KnockKnockServer {
 
         ServerSocket serverSocket = null;
         try {
+            System.out.println("Server Socket Created");
             serverSocket = new ServerSocket(4444);
         } catch (IOException e) {
             System.err.println("Could not listen on port: 4444.");
@@ -14,6 +15,7 @@ public class KnockKnockServer {
 
         Socket clientSocket = null;
         try {
+            System.out.println("Listening for Client");
             clientSocket = serverSocket.accept();
         } catch (IOException e) {
             System.err.println("Accept failed.");

@@ -30,10 +30,10 @@ public class KnockKnockClient {
                 break;
 		    
             fromUser = stdIn.readLine();
-	    if (fromUser != null) {
-                System.out.println("Client: " + fromUser);
-                out.println(fromUser);
-	    }
+            if (fromUser != null) {
+                    System.out.println("Client: " + fromUser);
+                    out.println(fromUser);
+            }
         }
 
         out.close();
