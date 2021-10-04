@@ -42,9 +42,12 @@ public class BoardRequest implements Runnable {
                 StringTokenizer tokens = new StringTokenizer(headerLine);
                 String method = tokens.nextToken();
                 System.out.println(method);
-                invokeMethod(method, tokens);
+                String response = invokeMethod(method, tokens);
                 // Send some sort of response to client
-                textOut.println("Please enter next method call");
+                textOut.println(response);
+
+                // if method
+                if (method.equalsIgnoreCase("DISCONNECT")) break;
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -56,40 +59,44 @@ public class BoardRequest implements Runnable {
         socket.close();
     }
 
-    private void invokeMethod(String method, StringTokenizer tokens) {
+    private String invokeMethod(String method, StringTokenizer tokens) {
+        String response = "";
         try {
             switch(method) {
                 case "POST":
-                    POST(tokens);
+                    response = POST(tokens);
                     break;
                 case "GET":
-                    GET(tokens);
+                    response = GET(tokens);
                     break;
                 case "PIN":
-                    PIN(tokens);
+                    response = PIN(tokens);
                     break;
                 case "UNPIN":
-                    UNPIN(tokens);
+                    response = UNPIN(tokens);
                     break;
                 case "CLEAR":
-                    CLEAR();
+                    response = CLEAR();
                     break;
                 case "SHAKE":
-                    SHAKE();
+                    response = SHAKE();
                     break;
                 case "CONNECT":
-                    CONNECT();
+                    response = CONNECT();
                     break;
                 case "DISCONNECT":
-                    DISCONNECT();
+                    response = DISCONNECT();
                     break;
             }
         } catch (Exception e) {
             System.out.println(e);
+            return "300 Client Error";
         }
+
+        return response;
     }
 
-    private void POST(StringTokenizer tokens) throws InvalidRequestParametersException {
+    private String POST(StringTokenizer tokens) throws InvalidRequestParametersException {
         int numTokens = tokens.countTokens();
         if (numTokens >= 6) {
             int xcoord, ycoord, width, height;
@@ -104,63 +111,105 @@ public class BoardRequest implements Runnable {
                 message = message.concat(tokens.nextToken());
             }
 
+            this.board.addNote(
+                    new Note(xcoord, ycoord, width,
+                            height, colour, message,
+                            false)
+            );
 
-
+            return "200 Request OK";
         } else {
             throw new InvalidRequestParametersException();
         }
     }
 
-    private void GET(StringTokenizer tokens) throws InvalidRequestParametersException {
+
+    private String GET(StringTokenizer tokens) throws InvalidRequestParametersException {
+        // Instantiates variables for use assuming proper token amount
+        ArrayList<String> localNoteArray = new ArrayList<>();
+        String response = "200 Request OK \n";
+
+        // Checks for proper token amount and calls respective getNotes method dependent
+        // on number of request parameters storing it in localNoteArray
         int numTokens = tokens.countTokens();
         if (numTokens == 0) {
-            System.out.println("GET request with no request parameters");
-            System.out.println("======================================");
-        } else if (numTokens == 3) {
-            System.out.println("GET request with 3 request parameters");
-            System.out.println("======================================");
+            localNoteArray = this.board.getNotes();
+        } else if (numTokens == 4) {
+            String colour = tokens.nextToken();
+            int x = Integer.parseInt(tokens.nextToken());
+            int y = Integer.parseInt(tokens.nextToken());
+            String refersTo = tokens.nextToken();
+            localNoteArray = this.board.getNotes(colour, x, y, refersTo);
+
         } else {
             throw new InvalidRequestParametersException();
         }
+
+        // concatenates the notes into the body of the response
+        for (String noteString: localNoteArray) {
+            response = response.concat(noteString + "\n");
+        }
+
+        return response;
     }
-    private void PIN(StringTokenizer tokens) throws InvalidRequestParametersException {
+    private String PIN(StringTokenizer tokens) throws InvalidRequestParametersException {
+        // Checks for proper token amount and calls pinNotes method if valid
         int numTokens = tokens.countTokens();
         if (numTokens == 2) {
-            System.out.println("PIN request to following coordinates");
-            System.out.printf("x coordinate: %s\n", tokens.nextToken());
-            System.out.printf("y coordinate: %s\n", tokens.nextToken());
-            System.out.println("======================================");
+            int x = Integer.parseInt(tokens.nextToken());
+            int y = Integer.parseInt(tokens.nextToken());
+            this.board.pinNotes(x, y);
         } else {
             throw new InvalidRequestParametersException();
         }
+
+        // returns the response header
+        return "200 Request OK";
     }
 
-    private void UNPIN(StringTokenizer tokens) throws InvalidRequestParametersException {
+    private String UNPIN(StringTokenizer tokens) throws InvalidRequestParametersException {
+        // Checks for proper token amount and calls pinNotes method if valid
         int numTokens = tokens.countTokens();
         if (numTokens == 2) {
-            System.out.println("UNPIN request to following coordinates");
-            System.out.printf("x coordinate: %s\n", tokens.nextToken());
-            System.out.printf("y coordinate: %s\n", tokens.nextToken());
-            System.out.println("======================================");
+            int x = Integer.parseInt(tokens.nextToken());
+            int y = Integer.parseInt(tokens.nextToken());
+            this.board.unpinNotes(x, y);
         } else {
             throw new InvalidRequestParametersException();
         }
+
+        // returns the response header
+        return "200 Request OK";
     }
 
-    private void CLEAR() {
+    private String CLEAR() {
         System.out.println("CLEAR request - All notes cleared");
+        this.board.clearNotes();
+        return "200 Request OK";
     }
 
-    private void SHAKE() {
+    private String SHAKE() {
         System.out.println("SHAKE request - All unpinned notes cleared");
+        this.board.shakeNotes();
+        return "200 Request OK";
     }
 
-    private void CONNECT() {
-        System.out.println("I think this method is redundant");
+    private String CONNECT() {
+        System.out.println("CONNECTION request - Sending Board parameters to client");
+        String response = "100 continue \n";
+        response = response.concat(" " + this.board.getWidth());
+        response = response.concat(" " + this.board.getHeight());
+
+        for (String colour: this.board.getColours()) {
+            response =  response.concat(" " + colour);
+        }
+
+        return response;
     }
 
-    private void DISCONNECT() {
+    private String DISCONNECT() {
         System.out.println("Disconnecting now");
+        return "200 Request OK";
     }
 }
 

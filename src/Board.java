@@ -13,6 +13,17 @@ public class Board {
         this.height = height;
         this.colours = colours;
     }
+    //getter methods
+    public int getWidth() {
+        return this.width;
+    }
+    public int getHeight() {
+        return this.height;
+    }
+    public ArrayList<String> getColours() {
+        return this.colours;
+    }
+
     /**
      * adds note to noteArrayList through noteList capsule
      * @param new_note - Note object to be added to the arraylist
@@ -167,12 +178,14 @@ public class Board {
         ArrayList<Note> noteArrayListSub = new ArrayList<>();
         synchronized (noteList) {
             ListIterator<Note> i = notes.listIterator();
-            // if x value is negative it means that the input was
-            // not given for coordinates and the output array should
+            // if refersTo value is null it means that the input was
+            // not given for in request parameters and the output array should
             // match the input array
             if (refersTo.equals("null")) {
                 return notes;
-            } else {
+            } else { //for non-null values appends any notes
+                // which satisfy the referenceMatches() constraint to the
+                // output ArrayList
                 while (i.hasNext()) {
                     Note tempNote = i.next();
                     if (tempNote.referenceMatches(refersTo)) {
@@ -200,7 +213,7 @@ public class Board {
 
     private String noteToString(Note note) {
         // [x,y] coordinates of note
-        String stringNote = "( [" + note.getxCoord() + "," + note.getyCoord() + "] ";
+        String stringNote = note.getCoordsAsString();
         // width of note
         stringNote = stringNote.concat("width=" + note.getWidth() + " ");
         // height of note
@@ -216,4 +229,13 @@ public class Board {
 
         return stringNote;
     };
+
+    public void clearNotes() {
+        this.noteList.clear();
+    }
+
+    public void shakeNotes() {
+        this.noteArrayList.removeIf((Note tempNote) -> !tempNote.isPinned());
+    }
+
 }

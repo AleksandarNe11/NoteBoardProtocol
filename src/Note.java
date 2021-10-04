@@ -82,6 +82,6 @@ public class Note {
     }
 
     public String getCoordsAsString() {
-        return "(" + this.getxCoord() + "," + this.getyCoord() + ")";
+        return "[" + this.getxCoord() + "," + this.getyCoord() + "] ";
     }
 }
