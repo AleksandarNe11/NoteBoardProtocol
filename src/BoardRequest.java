@@ -5,6 +5,7 @@ import java.util.* ;
 public class BoardRequest implements Runnable {
     Socket socket;
     final static String CRLF = "\r\n";
+    final static String DELIM = "!.!";
     final Board board;
 
     public BoardRequest(Socket socket, Board board) {
@@ -127,7 +128,7 @@ public class BoardRequest implements Runnable {
     private String GET(StringTokenizer tokens) throws InvalidRequestParametersException {
         // Instantiates variables for use assuming proper token amount
         ArrayList<String> localNoteArray = new ArrayList<>();
-        String response = "200 Request OK \n";
+        String response = "201 Request Response \n";
 
         // Checks for proper token amount and calls respective getNotes method dependent
         // on number of request parameters storing it in localNoteArray
@@ -147,7 +148,7 @@ public class BoardRequest implements Runnable {
 
         // concatenates the notes into the body of the response
         for (String noteString: localNoteArray) {
-            response = response.concat(noteString + "\n");
+            response = response.concat(noteString + DELIM);
         }
 
         return response;
@@ -197,11 +198,10 @@ public class BoardRequest implements Runnable {
     private String CONNECT() {
         System.out.println("CONNECTION request - Sending Board parameters to client");
         String response = "100 continue \n";
-        response = response.concat(" " + this.board.getWidth());
-        response = response.concat(" " + this.board.getHeight());
+        response = response.concat(this.board.getWidth() + DELIM + this.board.getHeight());
 
         for (String colour: this.board.getColours()) {
-            response =  response.concat(" " + colour);
+            response =  response.concat(DELIM + colour);
         }
 
         return response;

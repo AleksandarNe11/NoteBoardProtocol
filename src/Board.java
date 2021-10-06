@@ -219,13 +219,13 @@ public class Board {
         // height of note
         stringNote = stringNote.concat("height=" + note.getHeight() + " ");
         // colour of note
-        stringNote = stringNote.concat("colour=" + note.getColour() + "\n");
+        stringNote = stringNote.concat("colour=" + note.getColour() + " ");
         // message on note
-        stringNote = stringNote.concat("message=" + note.getMessage() + "\n");
+        stringNote = stringNote.concat("message=" + note.getMessage() + " ");
         // pinned or unpinned status
-        stringNote = note.isPinned()?stringNote =
-                stringNote.concat("Pinned) \n"):
-                stringNote.concat("Not Pinned) \n");
+        stringNote = note.isPinned()?
+                stringNote.concat("Pinned) !.!"):
+                stringNote.concat("Not Pinned) !.!");
 
         return stringNote;
     };
