@@ -21,6 +21,8 @@ public class frame1 {
 	private JFrame frmClientPortal;
 	private JTextField txtIPaddress;
 	private JTextField txtPORT;
+	private JTextField txtHEIGHT;
+	private JTextField txtWIDTH;
 
 	private JTextField textRefersTo;
 
@@ -118,6 +120,40 @@ public class frame1 {
 		frmClientPortal.getContentPane().add(btnCONNECT, gbc_btnCONNECT);
 	}
 
+	/**
+	 * create txtHEIGHT JtextField();
+	 */
+	private void renderTextHEIGHT() {
+		txtHEIGHT = new JTextField();
+		txtHEIGHT.setToolTipText("enter the height");
+		//txtHEIGHT.setText("enter Port number");
+		GridBagConstraints gbc_txtHEIGHT = new GridBagConstraints();
+		gbc_txtHEIGHT.gridwidth = 3;
+		gbc_txtHEIGHT.insets = new Insets(0, 0, 5, 5);
+		gbc_txtHEIGHT.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtHEIGHT.gridx = 3;
+		gbc_txtHEIGHT.gridy = 9;
+		frmClientPortal.getContentPane().add(txtHEIGHT, gbc_txtHEIGHT);
+		txtHEIGHT.setColumns(10);
+	
+	}
+
+	/**
+	 * create txtHEIGHT JtextField();
+	 */
+	private void renderTextWIDTH() {
+		txtWIDTH = new JTextField();
+		txtWIDTH.setToolTipText("enter the width");
+		//txtHEIGHT.setText("enter Port number");
+		GridBagConstraints gbc_txtWIDTH = new GridBagConstraints();
+		gbc_txtWIDTH.gridwidth = 3;
+		gbc_txtWIDTH.insets = new Insets(0, 0, 5, 5);
+		gbc_txtWIDTH.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtWIDTH.gridx = 3;
+		gbc_txtWIDTH.gridy = 10;
+		frmClientPortal.getContentPane().add(txtWIDTH, gbc_txtWIDTH);
+		txtHEIGHT.setColumns(10);
+	}
 
 	/**
 	 * Create btnCONNECT JButton
@@ -146,6 +182,29 @@ public class frame1 {
 	}
 
 	/**
+	 * create HeightLabel JLabel()
+	 */
+	private void renderHeightLabel() {
+		JLabel HeightLabel = new JLabel("Note Height: ");
+		GridBagConstraints gbc_HeightLabel = new GridBagConstraints();
+		gbc_HeightLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_HeightLabel.gridx = 1;
+		gbc_HeightLabel.gridy = 9;
+		frmClientPortal.getContentPane().add(HeightLabel, gbc_HeightLabel);
+	}
+
+	/**
+	 * create HeightLabel JLabel()
+	 */
+	private void renderWidthLabel() {
+		JLabel WidthLabel = new JLabel("Note Width: ");
+		GridBagConstraints gbc_WidthLabel = new GridBagConstraints();
+		gbc_WidthLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_WidthLabel.gridx = 1;
+		gbc_WidthLabel.gridy = 10;
+		frmClientPortal.getContentPane().add(WidthLabel, gbc_WidthLabel);
+	}
+	/**
 	 * create spinColour JSpinner()
 	 */
 	private void renderSpinColour() {
@@ -165,6 +224,7 @@ public class frame1 {
 	 */
 	private JButton renderBtnGET() {
 		JButton btnGET = new JButton("GET");
+		actionBtnGET(btnGET);
 		GridBagConstraints gbc_btnGET = new GridBagConstraints();
 		gbc_btnGET.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnGET.insets = new Insets(0, 0, 5, 5);
@@ -174,6 +234,24 @@ public class frame1 {
 
 		return btnGET;
 	}
+
+	/**
+	 * Create btnPOST JButton
+	 */
+	private JButton renderBtnPOST() {
+		JButton btnPOST = new JButton("POST");
+		actionBtnPOST(btnPOST);
+		GridBagConstraints gbc_btnPOST = new GridBagConstraints();
+		gbc_btnPOST.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnPOST.insets = new Insets(0, 0, 5, 5);
+		gbc_btnPOST.gridx = 12;
+		gbc_btnPOST.gridy = 5;
+		frmClientPortal.getContentPane().add(btnPOST, gbc_btnPOST);
+
+		return btnPOST;
+	}
+
+
 
 	/**
 	 * Action Listener function for BtnGET();
@@ -237,7 +315,7 @@ public class frame1 {
 		GridBagConstraints gbc_spinX = new GridBagConstraints();
 		gbc_spinX.gridwidth = 3;
 		gbc_spinX.insets = new Insets(0, 0, 5, 5);
-		gbc_spinX.gridx = 3;
+		gbc_spinX.gridx = 2;
 		gbc_spinX.gridy = 7;
 		frmClientPortal.getContentPane().add(spinX, gbc_spinX);
 	}
@@ -252,7 +330,7 @@ public class frame1 {
 		GridBagConstraints gbc_spinY = new GridBagConstraints();
 		gbc_spinY.gridwidth = 2;
 		gbc_spinY.insets = new Insets(0, 0, 5, 5);
-		gbc_spinY.gridx = 6;
+		gbc_spinY.gridx = 4;
 		gbc_spinY.gridy = 7;
 		frmClientPortal.getContentPane().add(spinY, gbc_spinY);
 	}
@@ -262,6 +340,7 @@ public class frame1 {
 	 */
 	private void renderBtnPIN() {
 		JButton btnPIN = new JButton("PIN");
+		actionBtnPIN(btnPIN);
 		btnPIN.setToolTipText("Requests server to pin all relevant notes (if a valid x and y coordinate is provided)");
 		GridBagConstraints gbc_btnPIN = new GridBagConstraints();
 		gbc_btnPIN.fill = GridBagConstraints.HORIZONTAL;
@@ -277,6 +356,7 @@ public class frame1 {
 	private void renderBtnUNPIN() {
 		JButton btnUNPIN = new JButton("UNPIN");
 		btnUNPIN.setToolTipText("Requests server to unpin all relevant notes (if a valid x and y coordinate is provided)");
+		actionBtnUNPIN(btnUNPIN);
 		GridBagConstraints gbc_btnUNPIN = new GridBagConstraints();
 		gbc_btnUNPIN.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnUNPIN.insets = new Insets(0, 0, 5, 5);
@@ -291,6 +371,7 @@ public class frame1 {
 	private void renderBtnSHAKE() {
 		JButton btnSHAKE = new JButton("SHAKE");
 		btnSHAKE.setToolTipText("Requests server to forget all notes which are not pinned");
+		actionBtnSHAKE(btnSHAKE);
 		GridBagConstraints gbc_btnSHAKE = new GridBagConstraints();
 		gbc_btnSHAKE.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnSHAKE.insets = new Insets(0, 0, 5, 5);
@@ -305,6 +386,7 @@ public class frame1 {
 	private void renderBtnCLEAR() {
 		JButton btnCLEAR = new JButton("CLEAR");
 		btnCLEAR.setToolTipText("Request to the server to forget all notes and pins.");
+		actionBtnCLEAR(btnCLEAR);
 		GridBagConstraints gbc_btnCLEAR = new GridBagConstraints();
 		gbc_btnCLEAR.fill = GridBagConstraints.BOTH;
 		gbc_btnCLEAR.insets = new Insets(0, 0, 5, 5);
@@ -317,6 +399,7 @@ public class frame1 {
 	 */
 	private void renderBtnDISCONNECT() {
 		JButton btnDISCONNECT = new JButton("DISCONNECT");
+		actionBtnDISCONNECT(btnDISCONNECT);
 		GridBagConstraints gbc_btnDISCONNECT = new GridBagConstraints();
 		gbc_btnDISCONNECT.insets = new Insets(0, 0, 5, 5);
 		gbc_btnDISCONNECT.gridx = 12;
@@ -362,6 +445,126 @@ public class frame1 {
 	}
 
 	/**
+	 * adds Action listener to GET buttion
+	 */
+	private void actionBtnGET(JButton btnConnect) {
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String refersTo = textRefersTo.getText();
+				int x = (Integer) spinX.getValue();
+				int y = (Integer) spinY.getValue();
+				String colour = (String) spinColour.getValue();
+
+				if (((x == -1) && (y ==-1)) && colour=="Default"){
+					if(refersTo == null || refersTo.isEmpty() || refersTo.trim().isEmpty()){
+						client.GET();
+					}
+					else{
+						client.GET(colour, x, y, refersTo);
+					}
+				}
+				else{
+					client.GET(colour, x, y, refersTo);
+				}
+			}
+		});
+	}
+
+
+	/**
+	 * adds Action listener to POST buttion
+	 */
+	private void actionBtnPOST(JButton btnConnect) {
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int x = (Integer) spinX.getValue();
+					int y = (Integer) spinY.getValue();
+					String width_str = txtWIDTH.getText();
+					int width = Integer.parseInt(width_str);
+					String height_str = txtHEIGHT.getText();
+					int height = Integer.parseInt(height_str);
+					String colour = (String) spinColour.getValue();
+					String message = textRefersTo.getText();
+
+					client.POST(x, y, width, height, colour, message);
+					
+				} catch (Exception ex) {
+					textDisplay.setText("Invalid Request");
+				}
+			}
+		});
+	}
+
+	/**
+	 * adds Action listener to PIN buttion
+	 */
+	private void actionBtnPIN(JButton btnConnect) {
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int x = (Integer) spinX.getValue();
+				int y = (Integer) spinY.getValue();
+
+				client.PIN(x, y);
+			}
+		});
+	}
+
+	/**
+	 * adds Action listener to UNPIN buttion
+	 */
+	private void actionBtnUNPIN(JButton btnConnect) {
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int x = (Integer) spinX.getValue();
+				int y = (Integer) spinY.getValue();
+
+				client.UNPIN(x, y);
+			}
+		});
+	}
+
+	/**
+	 * adds Action listener to SHAKE buttion
+	 */
+	private void actionBtnSHAKE(JButton btnConnect) {
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.SHAKE();
+			}
+		});
+	}
+
+	/**
+	* adds Action listener to CLEAR buttion
+	*/
+	private void actionBtnCLEAR(JButton btnConnect) {
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.CLEAR();
+			}
+		});
+	}
+
+	/**
+	* adds Action listener to DISCONNECT buttion
+	*/
+	private void actionBtnDISCONNECT(JButton btnConnect) {
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.DISCONNECT();
+			}
+		});
+	}
+
+	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
@@ -372,6 +575,13 @@ public class frame1 {
 		renderTextIPAddress();
 		renderTextPORT();
 		renderBtnCONNECT();
+
+		// render Label and Text boxes for Height and Width
+		renderTextHEIGHT();
+		renderTextWIDTH();
+		renderHeightLabel();
+		renderWidthLabel();
+
 
 		// render Label and Spinner for colour selection
 		renderColoursLabel();
@@ -385,12 +595,13 @@ public class frame1 {
 		renderSpinX();
 		renderSpinY();
 
+
 		//Render Buttons for Buttons for remaining methods
 		renderBtnPIN();
 		renderBtnUNPIN();
 		renderBtnSHAKE();
 		renderBtnCLEAR();
-//		renderBtnPOST();
+		renderBtnPOST();
 		renderBtnDISCONNECT();
 
 		//Renders the Text Display for information from Server
