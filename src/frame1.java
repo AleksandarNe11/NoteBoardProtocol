@@ -107,6 +107,7 @@ public class frame1 {
 		frmClientPortal.getContentPane().add(txtPORT, gbc_txtPORT);
 		txtPORT.setColumns(10);
 
+		/** 
 		JButton btnCONNECT = new JButton("CONNECT");
 		btnCONNECT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -118,6 +119,7 @@ public class frame1 {
 		gbc_btnCONNECT.gridx = 12;
 		gbc_btnCONNECT.gridy = 2;
 		frmClientPortal.getContentPane().add(btnCONNECT, gbc_btnCONNECT);
+		*/
 	}
 
 	/**
@@ -157,7 +159,7 @@ public class frame1 {
 
 	/**
 	 * Create btnCONNECT JButton
-	 */
+	
 	private void renderBtnCONNECT() {
 		JButton btnCONNECT = new JButton("CONNECT");
 		actionBtnCONNECT(btnCONNECT);
@@ -167,6 +169,18 @@ public class frame1 {
 		gbc_btnCONNECT.gridx = 12;
 		gbc_btnCONNECT.gridy = 2;
 		frmClientPortal.getContentPane().add(btnCONNECT, gbc_btnCONNECT);
+	}
+	*/
+	private void renderBtnCONNECT() {
+		BBbutton CONNECT = new BBbutton("CONNECT");
+		CONNECT.setText(CONNECT.getID());
+		GridBagConstraints gbc_btnCONNECT = new GridBagConstraints();
+		gbc_btnCONNECT.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnCONNECT.insets = new Insets(0, 0, 5, 5);
+		gbc_btnCONNECT.gridx = 12;
+		gbc_btnCONNECT.gridy = 2;
+		frmClientPortal.getContentPane().add(CONNECT, gbc_btnCONNECT);
+		CONNECT.addActionListener(new BBlisten(CONNECT.getID()));
 	}
 
 	/**
@@ -224,7 +238,43 @@ public class frame1 {
 	 */
 	private JButton renderBtnGET() {
 		JButton btnGET = new JButton("GET");
-		actionBtnGET(btnGET);
+		//actionBtnGET(btnGET);
+		btnGET.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e){
+				System.out.println("GETTING");
+				String refersTo = textRefersTo.getText();
+				int x = (Integer) spinX.getValue();
+				
+				//int y = (Integer) spinY.getValue();
+				//int x = 5;
+				int y = 5;
+				//String colour = "Red";
+				
+				try	{
+					spinColour.commitEdit();
+					String colour = (String) spinColour.getValue();
+				} catch ( java.text.ParseException a){				
+				
+				}
+				String colour = "Default";	
+				
+
+				System.out.println(refersTo);
+
+				if (((x == -1) && (y ==-1)) && colour=="Default"){
+					if(refersTo == null || refersTo.isEmpty() || refersTo.trim().isEmpty()){
+						client.GET();
+					}
+					else{
+						client.GET(colour, x, y, refersTo);
+					}
+				}
+				else{
+					client.GET(colour, x, y, refersTo);
+				}
+			}
+		});
 		GridBagConstraints gbc_btnGET = new GridBagConstraints();
 		gbc_btnGET.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnGET.insets = new Insets(0, 0, 5, 5);
@@ -259,7 +309,8 @@ public class frame1 {
 	private void addActionBtnGET(JButton btnGET) {
 		btnGET.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {	
+				System.out.println("GETTING");
 
 			}
 		});
