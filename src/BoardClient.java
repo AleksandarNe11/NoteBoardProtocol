@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
-public class BoardClient {
+public class BoardClient implements Runnable{
     final static String CRLF = "\r\n";
     private PrintWriter out;
     private BufferedReader in;
@@ -16,42 +16,53 @@ public class BoardClient {
     private String fromServer;
     private String lastAction;
     private String responseStatus = "body";
+    private final String IP;
+    private final int port;
 
     // Java Swing Objects references for modification
-    private JTextArea textArea;
+    private final JTextArea textArea;
     JSpinner spinX;
     JSpinner spinY;
     JSpinner spinColour;
 
     public BoardClient(String IP, int port, JTextArea textFrame,
                        JSpinner spinX, JSpinner spinY, JSpinner spinColour) {
-        textArea = textFrame;
-        try {
-            runClient(IP, port);
-        } catch (Exception e){
-            System.out.println(e);
-        }
+        this.textArea = textFrame;
+        this.IP = IP;
+        this.port = port;
+        this.spinX = spinX;
+        this.spinY = spinY;
+        this.spinColour = spinColour;
 
     }
 
-    public void runClient(String IP, int port) throws IOException {
+    @Override
+    public void run() {
+        try {
+            runClient();
+        } catch (IOException e){
+            System.out.println(e);
+        }
+    }
+
+    public void runClient() throws IOException{
         Socket socket = null;
-        PrintWriter out = null;
+        out = null;
         BufferedReader in = null;
 
 
 //        BoardClient(int portNumber){
-            try {
-                socket = new Socket(IP, port);
-                out = new PrintWriter(socket.getOutputStream(), true);
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            } catch (UnknownHostException e) {
-                System.err.println("Don't know host");
-                System.exit(1);
-            } catch (IOException e) {
-                System.err.println("Couldn't get I/O for the connection");
-                System.exit(1);
-            }
+        try {
+            socket = new Socket(IP, port);
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (UnknownHostException e) {
+            System.err.println("Don't know host");
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for the connection");
+            System.exit(1);
+        }
 //        }
 
         // Reads input from user in command line for testing setup
@@ -59,21 +70,16 @@ public class BoardClient {
         String fromServer;
         String fromUser;
 
-        while ((fromServer = in.readLine()) != null) {
-            System.out.println("Server: " + fromServer);
-            processServerInput(fromServer);
-            if (fromServer.equals("Bye."))
-                break;
-
-
-            // takes command line input, parses input to be one of the method types, sends method evaluation result to server through out.println(request)
-            fromUser = stdIn.readLine();
-            if (fromUser != null) {
-                System.out.println("Client: " + fromUser);
-                System.out.println("======================================");
-                String request = inputParser(fromUser);
-                System.out.println("======================================");
-                out.println(request);
+        while (true) {
+            if (in.ready()) {
+                if ((fromServer = in.readLine()) != null) {
+                    if (!fromServer.equals("")) {
+                        System.out.println("Server: " + fromServer);
+                        processServerInput(fromServer);
+                    }
+                    if (fromServer.equals("Bye."))
+                        break;
+                }
             }
         }
         out.close();
@@ -82,9 +88,9 @@ public class BoardClient {
         socket.close();
     }
 
-    public String inputParser(String fromUser) {
+    public String inputParser(String fromServer) {
         String request = "DISCONNECT";
-        switch(fromUser) {
+        switch(fromServer) {
             case "POST":
                 request = POST(1, 1, 5, 5, "Blue", "Hello World");
                 break;
@@ -224,7 +230,7 @@ public class BoardClient {
         String[] response_array;
         if (responseStatus.equalsIgnoreCase("body")) {
             response_array = response.split(" ");
-            switch (response_array[1]) {
+            switch (response_array[0]) {
                 case "100":
                     responseStatus = "100";
                     break;
@@ -265,13 +271,18 @@ public class BoardClient {
         spinX.setModel(new SpinnerNumberModel(-1, -1,
                 Integer.parseInt(response_array[0]), 1));
 
+        System.out.printf("Set SpinX bound to %d \n",  Integer.parseInt(response_array[0]));
+
         // sets maximum value for y coordinate to value returned in server response
-        spinX.setModel(new SpinnerNumberModel(-1, -1,
+        spinY.setModel(new SpinnerNumberModel(-1, -1,
                 Integer.parseInt(response_array[1]), 1));
+        System.out.printf("Set SpinY bound to %d",  Integer.parseInt(response_array[1]));
 
         // creates array of colours from server response and assigns the created array to the spinColour wheel
         String[] colours = Arrays.copyOfRange(response_array, 2, response_array.length);
+        System.out.println("Set spinColours to: \n" + Arrays.toString(colours));
         spinColour.setModel(new SpinnerListModel(colours));
+
 
         printOutput("Connected to server");
     }
@@ -308,6 +319,7 @@ public class BoardClient {
     public void terminateConnection() {
         fromServer = null;
     }
+
 }
 
 class InvalidInputException extends Exception {}

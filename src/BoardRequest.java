@@ -30,7 +30,7 @@ public class BoardRequest implements Runnable {
         PrintWriter textOut = new PrintWriter(socket.getOutputStream(), true);
 
         //Send Text to Client
-        textOut.println("Connection Established to server. BoardRequest Running");
+        textOut.println("Connection Established \n");
 
         // Define a reader to enable request parsing
         BufferedReader br = new BufferedReader(new InputStreamReader(is));

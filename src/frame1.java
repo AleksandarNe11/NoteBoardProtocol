@@ -180,7 +180,7 @@ public class frame1 {
 		gbc_btnCONNECT.gridx = 12;
 		gbc_btnCONNECT.gridy = 2;
 		frmClientPortal.getContentPane().add(CONNECT, gbc_btnCONNECT);
-		CONNECT.addActionListener(new BBlisten(CONNECT.getID()));
+		actionBtnCONNECT(CONNECT);
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class frame1 {
 	 * create spinColour JSpinner()
 	 */
 	private void renderSpinColour() {
-		JSpinner spinColour = new JSpinner();
+		spinColour = new JSpinner();
 		spinColour.setModel(new SpinnerListModel(new String[] {"Default", "Red", "Yellow", "Blue"}));
 		GridBagConstraints gbc_spinColour = new GridBagConstraints();
 		gbc_spinColour.fill = GridBagConstraints.HORIZONTAL;
@@ -238,43 +238,7 @@ public class frame1 {
 	 */
 	private JButton renderBtnGET() {
 		JButton btnGET = new JButton("GET");
-		//actionBtnGET(btnGET);
-		btnGET.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e){
-				System.out.println("GETTING");
-				String refersTo = textRefersTo.getText();
-				int x = (Integer) spinX.getValue();
-				
-				//int y = (Integer) spinY.getValue();
-				//int x = 5;
-				int y = 5;
-				//String colour = "Red";
-				
-				try	{
-					spinColour.commitEdit();
-					String colour = (String) spinColour.getValue();
-				} catch ( java.text.ParseException a){				
-				
-				}
-				String colour = "Default";	
-				
-
-				System.out.println(refersTo);
-
-				if (((x == -1) && (y ==-1)) && colour=="Default"){
-					if(refersTo == null || refersTo.isEmpty() || refersTo.trim().isEmpty()){
-						client.GET();
-					}
-					else{
-						client.GET(colour, x, y, refersTo);
-					}
-				}
-				else{
-					client.GET(colour, x, y, refersTo);
-				}
-			}
-		});
+		addActionBtnGET(btnGET);
 		GridBagConstraints gbc_btnGET = new GridBagConstraints();
 		gbc_btnGET.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnGET.insets = new Insets(0, 0, 5, 5);
@@ -308,10 +272,39 @@ public class frame1 {
 	 */
 	private void addActionBtnGET(JButton btnGET) {
 		btnGET.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {	
-				System.out.println("GETTING");
 
+			public void actionPerformed(ActionEvent e){
+				System.out.println("GETTING");
+				String refersTo = textRefersTo.getText();
+				int x = (Integer) spinX.getValue();
+
+				//int y = (Integer) spinY.getValue();
+				//int x = 5;
+				int y = 5;
+				//String colour = "Red";
+
+				try	{
+					spinColour.commitEdit();
+					String colour = (String) spinColour.getValue();
+				} catch ( java.text.ParseException a){
+
+				}
+				String colour = "Default";
+
+
+				System.out.println(refersTo);
+
+				if (((x == -1) && (y ==-1)) && colour=="Default"){
+					if(refersTo == null || refersTo.isEmpty() || refersTo.trim().isEmpty()){
+						client.GET();
+					}
+					else{
+						client.GET(colour, x, y, refersTo);
+					}
+				}
+				else{
+					client.GET(colour, x, y, refersTo);
+				}
 			}
 		});
 	}
@@ -360,7 +353,7 @@ public class frame1 {
 	 * create spinX Spinner
 	 */
 	private void renderSpinX() {
-		JSpinner spinX = new JSpinner();
+		spinX = new JSpinner();
 		spinX.setToolTipText("location of X coordinate on board");
 		spinX.setModel(new SpinnerNumberModel(-1, -1, 500, 1));
 		GridBagConstraints gbc_spinX = new GridBagConstraints();
@@ -375,7 +368,7 @@ public class frame1 {
 	 * create spinY JSpinner()
 	 */
 	private void renderSpinY() {
-		JSpinner spinY = new JSpinner();
+		spinY = new JSpinner();
 		spinY.setToolTipText("location of Y coordinate on board");
 		spinY.setModel(new SpinnerNumberModel(-1, -1, 500, 1));
 		GridBagConstraints gbc_spinY = new GridBagConstraints();
@@ -462,7 +455,7 @@ public class frame1 {
 	 *
 	 */
 	private void renderTextDisplay() {
-		JTextArea textDisplay = new JTextArea();
+		textDisplay = new JTextArea();
 		GridBagConstraints gbc_textDisplay = new GridBagConstraints();
 		gbc_textDisplay.gridwidth = 12;
 		gbc_textDisplay.insets = new Insets(0, 0, 0, 5);
@@ -477,20 +470,27 @@ public class frame1 {
 	 * adds Action listener to CONNECT buttion
 	 */
 	private void actionBtnCONNECT(JButton btnConnect) {
-		btnConnect.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String IP = txtIPaddress.getText();
-				try {
-					int port = Integer.parseInt(txtPORT.getText());
-					if (client == null) {
-						// if client has not already been initialized, initializes it
-						client = new BoardClient(IP, port, textDisplay, spinX, spinY, spinColour);
-						client.CONNECT();
-					}
-				} catch (Exception ex) {
-					textDisplay.setText("Invalid Request");
+		btnConnect.addActionListener(e -> {
+			String IP = txtIPaddress.getText();
+			try {
+				int port = Integer.parseInt(txtPORT.getText());
+				if (client == null) {
+
+//					BoardRequest request = new BoardRequest(clientSocket, board);
+//					// Create a new thread to process the request.
+//					Thread thread = new Thread(request);
+//					// Start the thread.
+//					thread.start();
+
+					// if client has not already been initialized, initializes it
+					client = new BoardClient(IP, port, textDisplay, spinX, spinY, spinColour);
+					Thread thread = new Thread(client);
+					thread.start();
+					Thread.sleep(1000);
+					client.CONNECT();
 				}
+			} catch (Exception ex) {
+				textDisplay.setText("Invalid Request");
 			}
 		});
 	}
