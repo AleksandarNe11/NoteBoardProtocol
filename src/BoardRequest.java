@@ -127,7 +127,7 @@ public class BoardRequest implements Runnable {
 
     private String GET(StringTokenizer tokens) throws InvalidRequestParametersException {
         // Instantiates variables for use assuming proper token amount
-        ArrayList<String> localNoteArray = new ArrayList<>();
+        ArrayList<String> localNoteArray;
         String response = "201 Request Response \n";
 
         // Checks for proper token amount and calls respective getNotes method dependent
@@ -135,7 +135,7 @@ public class BoardRequest implements Runnable {
         int numTokens = tokens.countTokens();
         if (numTokens == 0) {
             localNoteArray = this.board.getNotes();
-        } else if (numTokens == 4) {
+        } else if (numTokens >= 4) {
             String colour = tokens.nextToken();
             int x = Integer.parseInt(tokens.nextToken());
             int y = Integer.parseInt(tokens.nextToken());

@@ -145,7 +145,13 @@ public class BoardClient implements Runnable{
 
     public String GET(String colour, int x, int y, String refersTo) {
         String method = "GET ";
+        if (refersTo.equals("")) {
+            refersTo = "null";
+        }
+        
         String parameters = colour + " " + x + " " + y + " " + refersTo;
+
+
 
         updateLastAction(method);
 
