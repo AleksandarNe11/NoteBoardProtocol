@@ -241,7 +241,7 @@ public class frame1 {
 	 */
 	private JButton renderBtnGET() {
 		JButton btnGET = new JButton("GET");
-		addActionBtnGET(btnGET);
+		actionBtnGET(btnGET);
 		GridBagConstraints gbc_btnGET = new GridBagConstraints();
 		gbc_btnGET.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnGET.insets = new Insets(0, 0, 5, 5);
@@ -257,7 +257,7 @@ public class frame1 {
 	 */
 	private JButton renderBtnGETPINS() {
 		JButton btnGETPINS = new JButton("GET PINS");
-		addActionBtnGET(btnGETPINS);
+		addActionBtnGEPINS(btnGETPINS);
 		GridBagConstraints gbc_btnGETPINS = new GridBagConstraints();
 		gbc_btnGETPINS.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnGETPINS.insets = new Insets(0, 0, 5, 5);
@@ -283,48 +283,6 @@ public class frame1 {
 		frmClientPortal.getContentPane().add(btnPOST, gbc_btnPOST);
 
 		return btnPOST;
-	}
-
-
-
-	/**
-	 * Action Listener function for BtnGET();
-	*/
-	private void addActionBtnGET(JButton btnGET) {
-		btnGET.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e){
-				System.out.println("GETTING");
-
-				try	{
-					spinColour.commitEdit();
-
-					String refersTo = textRefersTo.getText();
-					int x = (Integer) GetSpinX.getValue();
-					int y = (Integer) GetSpinY.getValue();
-					String colour = (String) spinColour.getValue();
-
-
-					if (((x == -1) || (y ==-1)) || colour=="Default"){
-						if(refersTo == null || refersTo.isEmpty() || refersTo.trim().isEmpty()){
-							client.GET();
-						}
-						else{
-							client.GET(colour, x, y, refersTo);
-							//textDisplay.setText("Invalid Request");
-						}
-					}
-					else{
-						client.GET(colour, x, y, refersTo);
-					}
-
-				} catch ( java.text.ParseException a){
-
-				}
-
-				
-			}
-		});
 	}
 
 	/**
@@ -555,7 +513,7 @@ public class frame1 {
 //					thread.start();
 
 					// if client has not already been initialized, initializes it
-					client = new BoardClient(IP, port, textDisplay, spinX, spinY, spinColour);
+					client = new BoardClient(IP, port, textDisplay, spinX, spinY, GetSpinX, GetSpinY, spinColour);
 					Thread thread = new Thread(client);
 					thread.start();
 					Thread.sleep(1000);
@@ -584,8 +542,8 @@ public class frame1 {
 				try{
 			
 				String refersTo = textRefersTo.getText();
-				int x = (Integer) spinX.getValue();
-				int y = (Integer) spinY.getValue();
+				int x = (Integer) GetSpinX.getValue();
+				int y = (Integer) GetSpinY.getValue();
 				String colour = (String) spinColour.getValue();
 				
 				client.GET(colour, x, y, refersTo);

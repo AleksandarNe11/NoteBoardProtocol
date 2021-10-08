@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Note {
     private final int xcoord;
     private final int ycoord;
@@ -5,17 +7,16 @@ public class Note {
     private final int height;
     private final String colour;
     private final String message;
-    private Boolean status;
+    private ArrayList<int[]> pins = new ArrayList<>();
 
     public Note(int xcoord, int ycoord, int width, int height,
-            String colour, String message, Boolean status) {
+            String colour, String message) {
             this.xcoord = xcoord;
             this.ycoord = ycoord;
             this.width = width;
             this.height = height;
             this.colour = colour;
             this.message = message;
-            this.status = status;
     }
 
     // Getter Methods
@@ -38,15 +39,15 @@ public class Note {
         return this.message;
     }
     public Boolean isPinned() {
-        return this.status;
+        return (!this.pins.isEmpty());
     }
 
     // Setter Methods
-    public void pinNote() {
-        this.status = true;
+    public void pinNote(int x, int y) {
+        this.pins.add(new int[] {x, y});
     }
-    public void unpinNote() {
-        this.status = false;
+    public void unpinNote(int x, int y) {
+        pins.removeIf(pin -> x == this.getxCoord() && y == this.getyCoord());
     }
 
     //Functional Methods
@@ -69,7 +70,7 @@ public class Note {
      * @return - returns true if inputColour matches colour, returns false otherwise
      */
     public Boolean colourMatches(String inputColour) {
-        return inputColour == getColour();
+        return inputColour.equals(getColour());
     }
 
     /**

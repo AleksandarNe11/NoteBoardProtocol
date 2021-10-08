@@ -114,8 +114,7 @@ public class BoardRequest implements Runnable {
 
             this.board.addNote(
                     new Note(xcoord, ycoord, width,
-                            height, colour, message,
-                            false)
+                            height, colour, message)
             );
 
             return "200 Request OK";
@@ -140,6 +139,9 @@ public class BoardRequest implements Runnable {
             int x = Integer.parseInt(tokens.nextToken());
             int y = Integer.parseInt(tokens.nextToken());
             String refersTo = tokens.nextToken();
+            if (tokens.hasMoreTokens()) {
+                refersTo = refersTo.concat(tokens.nextToken());
+            }
             localNoteArray = this.board.getNotes(colour, x, y, refersTo);
 
         } else {

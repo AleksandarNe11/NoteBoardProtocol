@@ -23,15 +23,19 @@ public class BoardClient implements Runnable{
     private final JTextArea textArea;
     JSpinner spinX;
     JSpinner spinY;
+    JSpinner GetSpinX;
+    JSpinner GetSpinY;
     JSpinner spinColour;
 
     public BoardClient(String IP, int port, JTextArea textFrame,
-                       JSpinner spinX, JSpinner spinY, JSpinner spinColour) {
+                       JSpinner spinX, JSpinner spinY, JSpinner GetSpinX, JSpinner GetSpinY, JSpinner spinColour) {
         this.textArea = textFrame;
         this.IP = IP;
         this.port = port;
         this.spinX = spinX;
         this.spinY = spinY;
+        this.GetSpinX = GetSpinX;
+        this.GetSpinY = GetSpinY;
         this.spinColour = spinColour;
 
     }
@@ -145,8 +149,11 @@ public class BoardClient implements Runnable{
 
     public String GET(String colour, int x, int y, String refersTo) {
         String method = "GET ";
-        if (refersTo.equals("")) {
+        if (refersTo.equals(" ") || refersTo.equals("")) {
             refersTo = "null";
+        }
+        if (colour.equals(" ")) {
+            colour = "null";
         }
         
         String parameters = colour + " " + x + " " + y + " " + refersTo;
@@ -233,10 +240,13 @@ public class BoardClient implements Runnable{
     }
 
     private void processServerInput(String response) {
-        String[] response_array;
+        String[] body_array;
+        String[] header_array = response.split(" ");
+        if (header_array[0].equals("100") || header_array[0].equals("200")
+                ||  header_array[0].equals("201") ||  header_array[0].equals("300"))
+            responseStatus = "body";
         if (responseStatus.equalsIgnoreCase("body")) {
-            response_array = response.split(" ");
-            switch (response_array[0]) {
+            switch (header_array[0]) {
                 case "100":
                     responseStatus = "100";
                     break;
@@ -251,13 +261,13 @@ public class BoardClient implements Runnable{
                     break;
             }
         } else {
-            response_array = response.split("!.!");
+            body_array = response.split("!.!");
             switch (responseStatus) {
                 case "100":
-                    connectionEstablished(response_array);
+                    connectionEstablished(body_array);
                     break;
                 case "201":
-                    showResponseBody(response_array);
+                    showResponseBody(body_array);
                     break;
             }
 
@@ -276,17 +286,22 @@ public class BoardClient implements Runnable{
         // sets maximum value for X coordinate to value returned in server response
         spinX.setModel(new SpinnerNumberModel(-1, -1,
                 Integer.parseInt(response_array[0]), 1));
-
+        // sets maximum value for X coordinate to value returned in server response
+        GetSpinX.setModel(new SpinnerNumberModel(-1, -1,
+                Integer.parseInt(response_array[0]), 1));
         System.out.printf("Set SpinX bound to %d \n",  Integer.parseInt(response_array[0]));
 
         // sets maximum value for y coordinate to value returned in server response
         spinY.setModel(new SpinnerNumberModel(-1, -1,
                 Integer.parseInt(response_array[1]), 1));
-        System.out.printf("Set SpinY bound to %d",  Integer.parseInt(response_array[1]));
+        // sets maximum value for y coordinate to value returned in server response
+        GetSpinY.setModel(new SpinnerNumberModel(-1, -1,
+                Integer.parseInt(response_array[1]), 1));
+        System.out.printf("Set SpinY bound to %d \n",  Integer.parseInt(response_array[1]));
 
         // creates array of colours from server response and assigns the created array to the spinColour wheel
         String[] colours = Arrays.copyOfRange(response_array, 2, response_array.length + 1);
-        colours[colours.length-1] = "Default";
+        colours[colours.length-1] = " ";
         System.out.println("Set spinColours to: \n" + Arrays.toString(colours));
         spinColour.setModel(new SpinnerListModel(colours));
 

@@ -6,6 +6,7 @@ public class Board {
     int width;
     int height;
     ArrayList<String> colours;
+    ArrayList<int[]> pins;
 
 
     public Board(int width, int height, ArrayList<String> colours) {
@@ -42,9 +43,20 @@ public class Board {
         synchronized (noteList) {
             for (Note tempNote : noteList) {
                 if (tempNote.withinNote(x, y)) {
-                    tempNote.pinNote();
+                    tempNote.pinNote(x, y);
                 }
             }
+        }
+        int[] new_pin = {x, y};
+        boolean alreadyPinned = false;
+        for (int[] pin: this.pins) {
+            if (pin[0] == x && pin[1] == y) {
+                alreadyPinned = true;
+                break;
+            }
+        }
+        if (!alreadyPinned){
+            this.pins.add(new_pin);
         }
     }
 
@@ -59,9 +71,10 @@ public class Board {
             while (i.hasNext()) {
                 Note tempNote = i.next();
                 if (tempNote.withinNote(x, y)) {
-                    tempNote.unpinNote();
+                    tempNote.unpinNote(x, y);
                 }
             }
+            this.pins.removeIf(pin -> x == pin[0] && y == pin[1]);
         }
     }
 
@@ -213,7 +226,7 @@ public class Board {
 
     private String noteToString(Note note) {
         // [x,y] coordinates of note
-        String stringNote = note.getCoordsAsString();
+        String stringNote = "(" + note.getCoordsAsString();
         // width of note
         stringNote = stringNote.concat("width=" + note.getWidth() + " ");
         // height of note
