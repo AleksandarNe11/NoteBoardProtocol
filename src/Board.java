@@ -6,7 +6,7 @@ public class Board {
     int width;
     int height;
     ArrayList<String> colours;
-    ArrayList<int[]> pins;
+    ArrayList<int[]> pins = new ArrayList<>();
 
 
     public Board(int width, int height, ArrayList<String> colours) {
@@ -77,6 +77,29 @@ public class Board {
             this.pins.removeIf(pin -> x == pin[0] && y == pin[1]);
         }
     }
+
+    /**
+     * Returns an ArrayList object of all of the PINS in the format "(<x-coordinate>,<y-coordinate>)"
+     */
+    public ArrayList<String> getPins() {
+        ArrayList<String> coordArray = new ArrayList<>();
+        synchronized(pins){
+            Iterator<int []> it = pins.iterator();
+            System.out.println("I'm in here");
+            System.out.println(this.pins);
+            while (it.hasNext()){
+                int [] pair = it.next();
+                System.out.println(pair);
+                String pairText = pair.toString();
+                coordArray.add(pairText);
+
+            }
+            
+        }
+        return coordArray;
+    }
+
+
 
     /**
      * Returns an ArrayList object of all of the coordinates of notes as strings in the format "(<x-coordinate>,<y-coordinate>)"

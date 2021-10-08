@@ -133,14 +133,15 @@ public class BoardRequest implements Runnable {
         // on number of request parameters storing it in localNoteArray
         int numTokens = tokens.countTokens();
         if (numTokens == 0) {
-            localNoteArray = this.board.getNotes();
+            System.out.println("This is where I get");
+            localNoteArray = this.board.getPins();
         } else if (numTokens >= 4) {
             String colour = tokens.nextToken();
             int x = Integer.parseInt(tokens.nextToken());
             int y = Integer.parseInt(tokens.nextToken());
             String refersTo = tokens.nextToken();
             if (tokens.hasMoreTokens()) {
-                refersTo = refersTo.concat(tokens.nextToken());
+                refersTo = refersTo.concat(tokens.nextToken() + " ");
             }
             localNoteArray = this.board.getNotes(colour, x, y, refersTo);
 

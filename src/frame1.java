@@ -257,7 +257,7 @@ public class frame1 {
 	 */
 	private JButton renderBtnGETPINS() {
 		JButton btnGETPINS = new JButton("GET PINS");
-		addActionBtnGEPINS(btnGETPINS);
+		actionBtnGETPINS(btnGETPINS);
 		GridBagConstraints gbc_btnGETPINS = new GridBagConstraints();
 		gbc_btnGETPINS.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnGETPINS.insets = new Insets(0, 0, 5, 5);
@@ -283,18 +283,6 @@ public class frame1 {
 		frmClientPortal.getContentPane().add(btnPOST, gbc_btnPOST);
 
 		return btnPOST;
-	}
-
-	/**
-	 * Action Listener function for BtnGETPINS();
-	 */
-	private void addActionBtnGEPINS(JButton btnGETPINS) {
-		btnGETPINS.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e){
-				client.GET();
-				}
-		});
 	}
 
 	/**
@@ -400,7 +388,7 @@ public class frame1 {
 	private void renderSpinY() {
 		spinY = new JSpinner();
 		spinY.setToolTipText("location of Y coordinate on board");
-		spinY.setModel(new SpinnerNumberModel(-1, -1, 500, 1));
+		spinY.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		GridBagConstraints gbc_spinY = new GridBagConstraints();
 		gbc_spinY.gridwidth = 2;
 		gbc_spinY.insets = new Insets(0, 0, 5, 5);
@@ -556,6 +544,18 @@ public class frame1 {
 		});
 	}
 
+	/**
+	 * adds Action listener to GET buttion
+	 */
+	private void actionBtnGETPINS(JButton btnConnect) {
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.GET(" ", -1, -1, " ");
+
+			}
+		});
+	}
 
 	/**
 	 * adds Action listener to POST buttion
@@ -644,7 +644,12 @@ public class frame1 {
 		btnConnect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				client.DISCONNECT();
+				try{
+					client.DISCONNECT();
+				}
+				catch (Exception ex) {
+						textDisplay.setText("Not Yet Connected, Cannot Disconnect");
+				}
 			}
 		});
 	}

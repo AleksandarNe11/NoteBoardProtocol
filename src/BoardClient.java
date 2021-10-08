@@ -158,7 +158,11 @@ public class BoardClient implements Runnable{
         
         String parameters = colour + " " + x + " " + y + " " + refersTo;
 
+        // check if this is the GET Pins request
+        if ((refersTo == "null") && (colour == "null") && (x == -1) && (y == -1)){
+            parameters = "";
 
+        }
 
         updateLastAction(method);
 
@@ -284,7 +288,7 @@ public class BoardClient implements Runnable{
      */
     private void connectionEstablished(String[] response_array) {
         // sets maximum value for X coordinate to value returned in server response
-        spinX.setModel(new SpinnerNumberModel(-1, -1,
+        spinX.setModel(new SpinnerNumberModel(0, 0,
                 Integer.parseInt(response_array[0]), 1));
         // sets maximum value for X coordinate to value returned in server response
         GetSpinX.setModel(new SpinnerNumberModel(-1, -1,
@@ -292,7 +296,7 @@ public class BoardClient implements Runnable{
         System.out.printf("Set SpinX bound to %d \n",  Integer.parseInt(response_array[0]));
 
         // sets maximum value for y coordinate to value returned in server response
-        spinY.setModel(new SpinnerNumberModel(-1, -1,
+        spinY.setModel(new SpinnerNumberModel(0, 0,
                 Integer.parseInt(response_array[1]), 1));
         // sets maximum value for y coordinate to value returned in server response
         GetSpinY.setModel(new SpinnerNumberModel(-1, -1,
