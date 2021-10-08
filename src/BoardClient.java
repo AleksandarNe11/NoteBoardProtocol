@@ -120,7 +120,7 @@ public class BoardClient implements Runnable{
 
     public String POST(int x, int y, int width, int height, String colour, String message) {
         String method = "POST ";
-        String parameters = x + " " + y + width + " " + height + " " + colour + " " + message;
+        String parameters = x + " " + y + " " + width + " " + height + " " + colour + " " + message;
 
 //        String header = method.concat(parameters).concat(CRLF);
 //        String body = "<x-coordinate> <y-coordinate> <width> <height> <colour> <message>";
@@ -279,7 +279,8 @@ public class BoardClient implements Runnable{
         System.out.printf("Set SpinY bound to %d",  Integer.parseInt(response_array[1]));
 
         // creates array of colours from server response and assigns the created array to the spinColour wheel
-        String[] colours = Arrays.copyOfRange(response_array, 2, response_array.length);
+        String[] colours = Arrays.copyOfRange(response_array, 2, response_array.length + 1);
+        colours[colours.length-1] = "Default";
         System.out.println("Set spinColours to: \n" + Arrays.toString(colours));
         spinColour.setModel(new SpinnerListModel(colours));
 

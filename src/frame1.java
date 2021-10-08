@@ -28,6 +28,8 @@ public class frame1 {
 
 	// Swing objects that will get passed to the BoardClient class
 	private JTextArea textDisplay;
+	JSpinner GetSpinX;
+	JSpinner GetSpinY;
 	JSpinner spinX;
 	JSpinner spinY;
 	JSpinner spinColour;
@@ -250,6 +252,23 @@ public class frame1 {
 	}
 
 	/**
+	 * Create btnGETPINS JButton
+	 */
+	private JButton renderBtnGETPINS() {
+		JButton btnGETPINS = new JButton("GET PINS");
+		addActionBtnGET(btnGETPINS);
+		GridBagConstraints gbc_btnGETPINS = new GridBagConstraints();
+		gbc_btnGETPINS.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnGETPINS.insets = new Insets(0, 0, 5, 5);
+		gbc_btnGETPINS.gridx = 9;
+		gbc_btnGETPINS.gridy = 4;
+		frmClientPortal.getContentPane().add(btnGETPINS, gbc_btnGETPINS);
+
+		return btnGETPINS;
+	}
+
+
+	/**
 	 * Create btnPOST JButton
 	 */
 	private JButton renderBtnPOST() {
@@ -269,43 +288,53 @@ public class frame1 {
 
 	/**
 	 * Action Listener function for BtnGET();
-	 */
+	*/
 	private void addActionBtnGET(JButton btnGET) {
 		btnGET.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e){
 				System.out.println("GETTING");
-				String refersTo = textRefersTo.getText();
-				int x = (Integer) spinX.getValue();
-
-				//int y = (Integer) spinY.getValue();
-				//int x = 5;
-				int y = 5;
-				//String colour = "Red";
 
 				try	{
 					spinColour.commitEdit();
+
+					String refersTo = textRefersTo.getText();
+					int x = (Integer) GetSpinX.getValue();
+					int y = (Integer) GetSpinY.getValue();
 					String colour = (String) spinColour.getValue();
-				} catch ( java.text.ParseException a){
-
-				}
-				String colour = "Default";
 
 
-				System.out.println(refersTo);
-
-				if (((x == -1) && (y ==-1)) && colour=="Default"){
-					if(refersTo == null || refersTo.isEmpty() || refersTo.trim().isEmpty()){
-						client.GET();
+					if (((x == -1) || (y ==-1)) || colour=="Default"){
+						if(refersTo == null || refersTo.isEmpty() || refersTo.trim().isEmpty()){
+							client.GET();
+						}
+						else{
+							client.GET(colour, x, y, refersTo);
+							//textDisplay.setText("Invalid Request");
+						}
 					}
 					else{
 						client.GET(colour, x, y, refersTo);
 					}
+
+				} catch ( java.text.ParseException a){
+
 				}
-				else{
-					client.GET(colour, x, y, refersTo);
-				}
+
+				
 			}
+		});
+	}
+
+	/**
+	 * Action Listener function for BtnGETPINS();
+	 */
+	private void addActionBtnGEPINS(JButton btnGETPINS) {
+		btnGETPINS.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e){
+				client.GET();
+				}
 		});
 	}
 
@@ -319,6 +348,18 @@ public class frame1 {
 		gbc_lblRefersTo.gridx = 1;
 		gbc_lblRefersTo.gridy = 6;
 		frmClientPortal.getContentPane().add(lblRefersTo, gbc_lblRefersTo);
+	}
+
+		/**
+	 * create lblGetCoord JLabel()
+	 */
+	private void renderLblGetCoord() {
+		JLabel lblGetCoord = new JLabel("GET Coordintates (-1, -1) for all:");
+		GridBagConstraints gbc_lblGetCoord = new GridBagConstraints();
+		gbc_lblGetCoord.insets = new Insets(0, 0, 5, 5);
+		gbc_lblGetCoord.gridx = 1;
+		gbc_lblGetCoord.gridy = 5;
+		frmClientPortal.getContentPane().add(lblGetCoord, gbc_lblGetCoord);
 	}
 
 	/**
@@ -341,7 +382,7 @@ public class frame1 {
 	 * create x_yCoordinatesLabel JLabel
 	 */
 	private void renderX_YCoordinatesLabel() {
-		JLabel x_yCoordinatesLabel = new JLabel("Coordinates (x then y)");
+		JLabel x_yCoordinatesLabel = new JLabel("Post Coordinates (x then y)");
 		GridBagConstraints gbc_x_yCoordinatesLabel = new GridBagConstraints();
 		gbc_x_yCoordinatesLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_x_yCoordinatesLabel.gridx = 1;
@@ -350,12 +391,42 @@ public class frame1 {
 	}
 
 	/**
+	 * create GetSpinX Spinner
+	 */
+	private void renderGetSpinX() {
+		GetSpinX = new JSpinner();
+		GetSpinX.setToolTipText("location of X coordinate on board");
+		GetSpinX.setModel(new SpinnerNumberModel(-1, -1, 500, 1));
+		GridBagConstraints gbc_GetSpinX = new GridBagConstraints();
+		gbc_GetSpinX.gridwidth = 3;
+		gbc_GetSpinX.insets = new Insets(0, 0, 5, 5);
+		gbc_GetSpinX.gridx = 2;
+		gbc_GetSpinX.gridy = 5;
+		frmClientPortal.getContentPane().add(GetSpinX, gbc_GetSpinX);
+	}
+
+	/**
+	 * create GetSpinY Spinner
+	 */
+	private void renderGetSpinY() {
+		GetSpinY = new JSpinner();
+		GetSpinY.setToolTipText("location of Y coordinate on board");
+		GetSpinY.setModel(new SpinnerNumberModel(-1, -1, 500, 1));
+		GridBagConstraints gbc_GetSpinY = new GridBagConstraints();
+		gbc_GetSpinY.gridwidth = 3;
+		gbc_GetSpinY.insets = new Insets(0, 0, 5, 5);
+		gbc_GetSpinY.gridx = 4;
+		gbc_GetSpinY.gridy = 5;
+		frmClientPortal.getContentPane().add(GetSpinY, gbc_GetSpinY);
+	}
+
+	/**
 	 * create spinX Spinner
 	 */
 	private void renderSpinX() {
 		spinX = new JSpinner();
 		spinX.setToolTipText("location of X coordinate on board");
-		spinX.setModel(new SpinnerNumberModel(-1, -1, 500, 1));
+		spinX.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		GridBagConstraints gbc_spinX = new GridBagConstraints();
 		gbc_spinX.gridwidth = 3;
 		gbc_spinX.insets = new Insets(0, 0, 5, 5);
@@ -502,22 +573,19 @@ public class frame1 {
 		btnConnect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				try{
+			
 				String refersTo = textRefersTo.getText();
 				int x = (Integer) spinX.getValue();
 				int y = (Integer) spinY.getValue();
 				String colour = (String) spinColour.getValue();
+				
+				client.GET(colour, x, y, refersTo);
 
-				if (((x == -1) && (y ==-1)) && colour=="Default"){
-					if(refersTo == null || refersTo.isEmpty() || refersTo.trim().isEmpty()){
-						client.GET();
-					}
-					else{
-						client.GET(colour, x, y, refersTo);
-					}
+				} catch (Exception ex){
+					textDisplay.setText("Invalid Request");
 				}
-				else{
-					client.GET(colour, x, y, refersTo);
-				}
+
 			}
 		});
 	}
@@ -539,7 +607,7 @@ public class frame1 {
 					int height = Integer.parseInt(height_str);
 					String colour = (String) spinColour.getValue();
 					String message = textRefersTo.getText();
-
+	
 					client.POST(x, y, width, height, colour, message);
 					
 				} catch (Exception ex) {
@@ -640,9 +708,13 @@ public class frame1 {
 
 		// Render GET button and Labels Spinners for items associated
 		renderBtnGET();
+		renderBtnGETPINS();
 		renderLblRefersTo();
 		renderTextRefersTo();
 		renderX_YCoordinatesLabel();
+		renderLblGetCoord();
+		renderGetSpinX();
+		renderGetSpinY();
 		renderSpinX();
 		renderSpinY();
 
