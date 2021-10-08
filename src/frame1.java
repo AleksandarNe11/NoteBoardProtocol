@@ -183,6 +183,7 @@ public class frame1 {
 		gbc_btnCONNECT.gridy = 2;
 		frmClientPortal.getContentPane().add(CONNECT, gbc_btnCONNECT);
 		actionBtnCONNECT(CONNECT);
+
 	}
 
 	/**
@@ -558,6 +559,13 @@ public class frame1 {
 					Thread thread = new Thread(client);
 					thread.start();
 					Thread.sleep(1000);
+					client.CONNECT();
+				}
+				else{
+					Thread thread = new Thread(client);
+					thread.start();
+					Thread.sleep(1000);
+
 					client.CONNECT();
 				}
 			} catch (Exception ex) {
